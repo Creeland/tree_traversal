@@ -2,6 +2,14 @@ require "spec_helper"
 require_relative "../tree.rb"
 
 RSpec.describe do
+  let(:desired_payload) { 'desired' }
+  let(:undesired_payload) { 'undesired' }
+
+  let(:root) { Tree.new(root_payload, [left_side, right_side]) }
+  let(:root_payload) { undesired_payload }
+  let(:left_side) { nil }
+  let(:right_side) { nil }
+
   # Children
   first_child = Tree.new(4, [])
   second_child = Tree.new(5, [])
@@ -35,5 +43,52 @@ RSpec.describe do
     it "returns the third child's payload" do
       expect(depth_first(ancestor, 6)).to eq(6)
     end 
+  end
+
+  describe "#breadth_first" do
+    context "when node's payload is the target" do
+      let(:root_payload) { desired_payload }
+
+      it "returns its payload" do 
+        expect(root.breadth_first(desired_payload)).to eq desired_payload
+      end
+    end 
+
+    context 'when node DOES NOT have children' do
+      let(:left_side) { nil }
+      let(:right_side) { nil }
+
+      context "when node's payload is NOT the target" do
+        let(:root_payload) { undesired_payload }
+
+        it "returns nil" do
+          expect(root.breadth_first(desired_payload)).to be_nil
+        end
+      end
+    end
+
+    context 'when node has children' do 
+      context 'when left child contains desired payload' do
+        let(:left_side) { Tree.new(desired_payload, [nil, nil]) }
+
+        
+      end
+    end
+
+    # it "returns the first parent's payload" do 
+    #   expect(breadth_first(ancestor, 2)).to eq(2)
+    # end
+
+    # it "returns the first child's payload" do
+    #   expect(breadth_first(ancestor, 4)).to eq(4)
+    # end 
+
+    # it "returns the second child's payload" do 
+    #   expect(breadth_first(ancestor, 5)).to eq(5)
+    # end
+
+    # it "returns the third child's payload" do
+    #   expect(breadth_first(ancestor, 6)).to eq(6)
+    # end 
   end
 end
