@@ -67,11 +67,15 @@ RSpec.describe do
       end
     end
 
-    context 'when node has children' do 
+    context 'when node has children but DOES NOT ITSELF contain the desired payload' do 
+      let(:root_payload) { undesired_payload }
+
       context 'when left child contains desired payload' do
         let(:left_side) { Tree.new(desired_payload, [nil, nil]) }
 
-        
+        it 'returns desired payload' do 
+          expect(root.breadth_first(desired_payload)).to eq desired_payload
+        end
       end
     end
 

@@ -19,6 +19,7 @@ class Tree
 
   def breadth_first(target)
     return payload if target == payload
+    children.first.breadth_first(target) if children.first
   end
 end
 
