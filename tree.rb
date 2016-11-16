@@ -8,6 +8,13 @@ class Tree
     @children = children
   end
 
+  def depth_first(target)
+    return payload if payload == target
+    search_result = children.first.depth_first(target) if !children.first.nil? 
+    return search_result if search_result
+    return children[1].depth_first(target) if !children[1].nil? 
+  end
+
 end
 
 # Children
@@ -23,16 +30,12 @@ second_parent = Tree.new(3, [third_child, fourth_child])
 # Grandparent
 ancestor = Tree.new(1, [first_parent, second_parent])
 
-def depth_first(node, target, previous_nodes=[], child_count=0) 
-  return target if !node.nil? && node.payload == target 
-  previous_nodes.push(node) if node != previous_nodes.last
+ancestor.depth_first(5)
 
-  if node.children[child_count].nil?
-    previous_nodes.pop 
-    child_count += 1
-    return target if depth_first(previous_nodes.last, target, previous_nodes, child_count) == target
-  end
-
-  node = node.children[child_count]
-  depth_first(node, target, previous_nodes)
-end
+# def depth_first(node, target) 
+#   return if node.nil?
+#   return node.payload if target == node.payload
+#   search_result = depth_first(node.children.first, target)
+#   return search_result if search_result
+#   return depth_first(node.children[1], target)
+# end
