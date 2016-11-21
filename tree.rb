@@ -1,5 +1,23 @@
 require 'byebug'
 
+class Queue
+  def initialize
+    @queue = []
+  end
+
+  def enqueue(item)
+    @queue.push(item)
+  end
+
+  def dequeue
+    @queue.shift
+  end
+
+  def empty?
+    @queue.empty?
+  end
+end
+
 class Tree
   attr_accessor :payload, :children
 
@@ -17,23 +35,20 @@ class Tree
     # return children[1].depth_first(target) if !children[1].nil? 
   end
 
-  def breadth_first(target)
+  def breadth_first(target, queue)
     return payload if target == payload
-    children.first.breadth_first(target) if children.first
-  end
-end
-
-class Queue
-  def initialize
-    @queue = []
+    children.each { |n| queue.enqueue(n) }
+    check = queue.dequeue
+    check = nil_cycle(check, queue) if check.nil?
+    return check.breadth_first(target, queue) if check
   end
 
-  def enqueue(item)
-    @queue.push(item)
-  end
-
-  def dequeue
-    @queue.shift
+  def nil_cycle(check, queue)
+    while check.nil? do
+      check = queue.dequeue
+      return check if check
+      return if queue.empty?
+    end
   end
 end
 
